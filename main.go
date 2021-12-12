@@ -1,8 +1,11 @@
 package main
 
 import (
+	"akedev7/10hourswithGo/controllers"
 	"akedev7/10hourswithGo/models"
+	"errors"
 	"fmt"
+	"net/http"
 )
 
 const (
@@ -17,6 +20,25 @@ func main() {
 	//Use struct from another package
 	u := models.User{1, "Hello", "World"}
 	fmt.Println(u)
+
+	//Function
+	port := 3000
+	port, err := startWebServer(port)
+	fmt.Println(port, err)
+
+	_, err2 := startWebServer(port) //If the first param will not be used then use _ instead.
+	fmt.Println(err2)
+
+	//Build HTTP controller
+	controllers.RegisterControllers()
+	http.ListenAndServe(":3000", nil) //nill = DefaulatServeMux
+
+}
+
+func startWebServer(port int) (int, error) { //Function can return multiple returned value
+	fmt.Println("Starting server....")
+	fmt.Println("Server started on port", port)
+	return port, errors.New("Something went wrong")
 }
 
 func basicGo() {
@@ -86,7 +108,7 @@ func basicGo() {
 	delete(m, "foo")
 	fmt.Println(m)
 
-	//Struct
+	//Struct   // Struct is not class, it only contains properties
 	type user struct { // can be moved out of main to package level
 		ID        int
 		FirstName string
